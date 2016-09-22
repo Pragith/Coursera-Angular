@@ -39,7 +39,7 @@
          </button>
        </li>
      </ul>
-     <div class="emptyMessage" ng-if='shopping.item_count'> Everything is bought! </div>
+     <div class="emptyMessage" ng-if='shopping.buy_items.length == 0'> Everything is bought! </div>
     </div>
 
     <!-- Already Bought List -->
@@ -48,7 +48,7 @@
      <ul>
        <li ng-repeat='item in bought.bought_items'>Bought {{ item.quantity }} {{ item.name }}</li>
      </ul>
-     <div class="emptyMessage" ng-if='bought.item_count'>Nothing bought yet.</div>
+     <div class="emptyMessage" ng-if='bought.bought_items.length == 0'>Nothing bought yet.</div>
     </div>
   </div>
 </div>
