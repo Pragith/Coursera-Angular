@@ -29,26 +29,26 @@
   <div class="row">
 
     <!-- To Buy List -->
-    <div class="col-md-6" ng-controller='ToBuyShoppingController'>
+    <div class="col-md-6" ng-controller='ToBuyShoppingController as shopping'>
      <h2>To Buy:</h2>
      <ul>
-       <li ng-repeat='item in buy_items'>
+       <li ng-repeat='item in shopping.buy_items'>
          Buy {{ item.quantity }} {{ item.name }}
-         <button class="btn btn-default" ng-click='addToBoughtList($index)'>
+         <button class="btn btn-default" ng-click='shopping.addToBoughtList($index)'>
            <span class="glyphicon glyphicon-ok"></span> Bought
          </button>
        </li>
      </ul>
-     <div class="emptyMessage"> {{ emptyMessage }}</div>
+     <div class="emptyMessage" ng-if='shopping.item_count'> Everything is bought! </div>
     </div>
 
     <!-- Already Bought List -->
-    <div class="col-md-6" ng-controller='AlreadyBoughtShoppingController'>
+    <div class="col-md-6" ng-controller='AlreadyBoughtShoppingController as bought'>
      <h2>Already Bought:</h2>
      <ul>
-       <li>Bought 10 cookies</li>
+       <li ng-repeat='item in bought.bought_items'>Bought {{ item.quantity }} {{ item.name }}</li>
      </ul>
-     <div class="emptyMessage">Nothing bought yet.</div>
+     <div class="emptyMessage" ng-if='bought.item_count'>Nothing bought yet.</div>
     </div>
   </div>
 </div>
