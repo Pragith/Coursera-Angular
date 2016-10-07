@@ -4,6 +4,8 @@
 
 (function(){
 
+  l = console.log
+
   angular.module('NarrowItDownApp', [])
   .controller('NarrowItDownController', NarrowItDownController)
   .service('MenuSearchService', MenuSearchService)
@@ -16,36 +18,36 @@
 
   function FoundItemsDirective(){
     return {
-      template: 'foundItemsTemplate.html',
+      template: 'foundItems.html',
       scope: {
-        foundItems: '<',
+        items: '<',
         onRemove: '&'
-      },
-      controller: NarrowItDownDirectiveController,
-      controllerAs: 'narrow',
-      bindToController: true
+      }
     }
   }
 
   function NarrowItDownDirectiveController(){
-    narrow.getResults = function(){
-      found = MenuSearchService.getMatchedMenuItems(narrow.searchTerm)
-      found.then(function (result){
-        if (narrow.searchTerm == '' || result.length == 0){
-          narrow.errorMsg = 'Nothing found!'
-        }
-        else{
-          narrow.foundItems = result
-        }
-      }).catch(function (error){
-        console.log('error')
-      })
-    }
+    narrowd = this
+    narrowd.items = narrowd.getResults()
   }
 
 
   function NarrowItDownController(MenuSearchService){
       narrow = this
+      narrow.searchTerm = "rice"
+      narrow.items = [];
+      narrow.errorMsg = 'Nothing found!'
+
+      narrow.getResults = function(){
+        if (narrow.searchTerm == ''){
+          narrow.items = []
+          return;
+        }
+        found = MenuSearchService.getMatchedMenuItems(narrow.searchTerm)
+        found.then(function (result){
+            narrow.items = result
+        })
+      }
 
       narrow.removeItem = function(index){
         return MenuSearchService.removeItem(index)
@@ -55,7 +57,7 @@
 
   function MenuSearchService($http){
     service = this
-    foundItems = []
+    items = []
 
     service.getMatchedMenuItems = function(searchTerm){
       return $http({
@@ -71,17 +73,17 @@
           for (i=0;i<data.length;i++){
             if (data[i].description.search(searchTerm) != -1){
               // process result and only keep items that match
-                foundItems.push(data[i])
+                items.push(data[i])
             }
           }
           // return processed items
         }
-        return foundItems
+        return items
       })
     }
 
     service.removeItem = function(index){
-      return foundItems.splice(index, 1)
+      return items.splice(index, 1)
     }
   }
 
